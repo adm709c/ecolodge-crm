@@ -1,14 +1,8 @@
 import { LogIn, LogOut } from 'lucide-react';
 
-const checkins = [
-  { id: 1, name: 'Marina Silva', room: '203', time: '14:30' },
-  { id: 2, name: 'João Santos', room: '105', time: '16:00' },
-];
+const checkins: { id: number; name: string; room: string; time: string }[] = [];
 
-const checkouts = [
-  { id: 1, name: 'Carlos Mendes', room: '301', time: '10:45' },
-  { id: 2, name: 'Ana Pereira', room: '204', time: '11:15' },
-];
+const checkouts: { id: number; name: string; room: string; time: string }[] = [];
 
 export function TodayCheckins() {
   return (

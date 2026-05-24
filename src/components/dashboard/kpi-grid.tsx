@@ -60,19 +60,17 @@ export function KPIGrid() {
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <KPICard
         label="Receita Mensal"
-        value="R$ 48.500"
+        value="R$ 0"
         subtitle="Estimado"
         icon="💰"
         color="sand"
-        trend={{ direction: 'up', percentage: 12 }}
       />
       <KPICard
         label="Ticket Médio"
-        value="R$ 1.850"
+        value="R$ 0"
         subtitle="Por diária"
         icon="🎯"
         color="terracotta"
-        trend={{ direction: 'down', percentage: 2 }}
       />
     </div>
   );

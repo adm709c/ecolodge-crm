@@ -73,13 +73,13 @@ export async function getMeta() {
 
     if (error) {
       console.warn('Erro ao carregar meta:', error);
-      return 28;
+      return 0;
     }
 
-    return data?.[0]?.meta_value || 28;
+    return data?.[0]?.meta_value || 0;
   } catch (error) {
     console.warn('Erro ao carregar meta:', error);
-    return 28;
+    return 0;
   }
 }
 

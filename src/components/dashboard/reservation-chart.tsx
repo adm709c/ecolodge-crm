@@ -11,12 +11,12 @@ import {
 } from 'recharts';
 
 const data = [
-  { month: 'Jan', reservas: 12, ocupacao: 45 },
-  { month: 'Fev', reservas: 19, ocupacao: 58 },
-  { month: 'Mar', reservas: 15, ocupacao: 52 },
-  { month: 'Abr', reservas: 25, ocupacao: 71 },
-  { month: 'Mai', reservas: 22, ocupacao: 68 },
-  { month: 'Jun', reservas: 28, ocupacao: 85 },
+  { month: 'Jan', reservas: 0, ocupacao: 0 },
+  { month: 'Fev', reservas: 0, ocupacao: 0 },
+  { month: 'Mar', reservas: 0, ocupacao: 0 },
+  { month: 'Abr', reservas: 0, ocupacao: 0 },
+  { month: 'Mai', reservas: 0, ocupacao: 0 },
+  { month: 'Jun', reservas: 0, ocupacao: 0 },
 ];
 
 export function ReservationChart() {

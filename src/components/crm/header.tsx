@@ -6,8 +6,8 @@ import { EditMetaModal } from './edit-meta-modal';
 import { getMeta, updateMeta } from '@/lib/supabase';
 
 export function CRMHeader() {
-  const [meta, setMeta] = useState(28);
-  const [confirmed, setConfirmed] = useState(12);
+  const [meta, setMeta] = useState(0);
+  const [confirmed, setConfirmed] = useState(0);
   const [isEditMetaOpen, setIsEditMetaOpen] = useState(false);
   const progressPercent = Math.round((confirmed / meta) * 100);
 
@@ -99,7 +99,7 @@ export function CRMHeader() {
             <Calendar className="text-sand-500" size={24} />
             <div>
               <p className="text-xs text-sage-600 font-semibold">Reservas no Pipeline</p>
-              <p className="text-xl font-bold text-sand-700">18 reservas</p>
+              <p className="text-xl font-bold text-sand-700">0 reservas</p>
               <p className="text-xs text-sage-600">Aguardando confirmação</p>
             </div>
           </div>
