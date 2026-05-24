@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Send, Leaf } from 'lucide-react';
-import { createReservation } from '@/lib/supabase';
 
 interface PresellFormProps {
   whatsappNumber: string;
@@ -40,39 +39,12 @@ export function PresellForm({ whatsappNumber }: PresellFormProps) {
       return;
     }
 
-    // Salvar novo lead no Supabase
-    try {
-      const newLead = {
-        guest_name: formData.name,
-        check_in: new Date().toISOString().split('T')[0],
-        check_out: new Date(Date.now() + 86400000).toISOString().split('T')[0],
-        people: 1,
-        value: 0,
-        source: 'google_ads',
-        status: 'new_lead',
-        phone: formData.phone,
-        gclid: gclid,
-      };
+    // Preparar mensagem para WhatsApp com dados do lead
+    const message = `Olá! Meu nome é ${formData.name} e meu WhatsApp é ${formData.phone}. Vim do Google e gostaria de agendar uma reserva!`;
+    const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
 
-      // Tentar salvar, mas não deixar falhar se houver erro
-      try {
-        await createReservation(newLead);
-        console.log('Lead salvo no Supabase');
-      } catch (dbError) {
-        console.warn('Erro ao salvar no Supabase (continuando):', dbError);
-      }
-
-      // Preparar mensagem para WhatsApp
-      const message = `Vim do Google e gostaria de agendar!`;
-      const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
-
-      // Redirecionar para WhatsApp
-      window.location.href = whatsappUrl;
-    } catch (error) {
-      console.error('Erro ao processar:', error);
-      alert('Erro ao processar sua solicitação');
-      setIsLoading(false);
-    }
+    // Redirecionar para WhatsApp
+    window.location.href = whatsappUrl;
   };
 
   return (
