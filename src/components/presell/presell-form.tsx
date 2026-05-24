@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Send, Leaf } from 'lucide-react';
+import { createReservation } from '@/lib/supabase';
 
 interface PresellFormProps {
   whatsappNumber: string;
@@ -39,12 +40,32 @@ export function PresellForm({ whatsappNumber }: PresellFormProps) {
       return;
     }
 
+    // Salvar lead no CRM (sem bloquear o redirect)
+    const newLead = {
+      guest_name: formData.name,
+      check_in: new Date().toISOString().split('T')[0],
+      check_out: new Date(Date.now() + 86400000).toISOString().split('T')[0],
+      people: 1,
+      value: 0,
+      source: 'google_ads',
+      status: 'new_lead',
+      phone: formData.phone,
+      gclid: gclid,
+    };
+
+    // Salvar no background (não espera resposta)
+    createReservation(newLead).catch(err => {
+      console.warn('Erro ao salvar no CRM:', err);
+    });
+
     // Preparar mensagem para WhatsApp com dados do lead
     const message = `Olá! Meu nome é ${formData.name} e meu WhatsApp é ${formData.phone}. Vim do Google e gostaria de agendar uma reserva!`;
     const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
 
-    // Redirecionar para WhatsApp
-    window.location.href = whatsappUrl;
+    // Redirecionar para WhatsApp imediatamente
+    setTimeout(() => {
+      window.location.href = whatsappUrl;
+    }, 100);
   };
 
   return (
