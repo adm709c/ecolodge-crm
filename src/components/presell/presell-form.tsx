@@ -54,7 +54,13 @@ export function PresellForm({ whatsappNumber }: PresellFormProps) {
         gclid: gclid,
       };
 
-      await createReservation(newLead);
+      // Tentar salvar, mas não deixar falhar se houver erro
+      try {
+        await createReservation(newLead);
+        console.log('Lead salvo no Supabase');
+      } catch (dbError) {
+        console.warn('Erro ao salvar no Supabase (continuando):', dbError);
+      }
 
       // Preparar mensagem para WhatsApp
       const message = `Vim do Google e gostaria de agendar!`;
@@ -63,7 +69,7 @@ export function PresellForm({ whatsappNumber }: PresellFormProps) {
       // Redirecionar para WhatsApp
       window.location.href = whatsappUrl;
     } catch (error) {
-      console.error('Erro ao salvar lead:', error);
+      console.error('Erro ao processar:', error);
       alert('Erro ao processar sua solicitação');
       setIsLoading(false);
     }
