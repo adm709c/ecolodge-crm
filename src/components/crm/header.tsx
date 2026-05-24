@@ -50,17 +50,19 @@ export function CRMHeader() {
               Jornada do Hóspede - Kanban de Atendimento
             </p>
           </div>
-          <div className="text-right flex flex-col items-end gap-2">
-            <p className="text-sm text-sage-600 capitalize">{currentDate}</p>
-            <p className="text-xs text-sage-500">Última atualização: agora</p>
+          <div className="text-right flex flex-col items-end gap-3">
+            <div>
+              <p className="text-sm text-sage-600 capitalize">{currentDate}</p>
+              <p className="text-xs text-sage-500">Última atualização: agora</p>
+            </div>
             <a
               href="/presell"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1 px-3 py-1.5 text-xs font-semibold text-eco-600 hover:text-eco-700 hover:bg-eco-50 rounded-lg transition-colors"
+              className="flex items-center gap-2 px-4 py-2 text-sm font-semibold bg-eco-500 text-white hover:bg-eco-600 rounded-lg transition-colors shadow-soft"
             >
+              <ExternalLink size={16} />
               Ver Presell
-              <ExternalLink size={14} />
             </a>
           </div>
         </div>
