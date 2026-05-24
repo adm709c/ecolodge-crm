@@ -1,12 +1,11 @@
-import { Suspense } from 'react';
 import { PresellForm } from '@/components/presell/presell-form';
+
+export const dynamic = 'force-dynamic';
 
 export default function PresellPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-gradient-to-br from-eco-50 to-sage-50 flex items-center justify-center p-4">Carregando...</div>}>
-      <div className="min-h-screen bg-gradient-to-br from-eco-50 to-sage-50 flex items-center justify-center p-4">
-        <PresellForm whatsappNumber="558194736933" />
-      </div>
-    </Suspense>
+    <div className="min-h-screen bg-gradient-to-br from-eco-50 to-sage-50 flex items-center justify-center p-4">
+      <PresellForm whatsappNumber="558194736933" />
+    </div>
   );
 }
