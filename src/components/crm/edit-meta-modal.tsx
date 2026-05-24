@@ -49,7 +49,7 @@ export function EditMetaModal({ isOpen, currentMeta, onClose, onSave }: EditMeta
               id="meta"
               value={meta}
               onChange={(e) => setMeta(Number(e.target.value))}
-              min="1"
+              min="0"
               className="w-full px-4 py-2 border border-sage-200 rounded-lg bg-cream focus:outline-none focus:ring-2 focus:ring-eco-500"
             />
           </div>
