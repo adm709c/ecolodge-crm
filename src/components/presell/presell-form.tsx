@@ -54,9 +54,14 @@ export function PresellForm({ whatsappNumber }: PresellFormProps) {
     };
 
     // Salvar no background (não espera resposta)
-    createReservation(newLead).catch(err => {
-      console.warn('Erro ao salvar no CRM:', err);
-    });
+    console.log('Salvando lead:', newLead);
+    createReservation(newLead)
+      .then(result => {
+        console.log('Lead salvo com sucesso:', result);
+      })
+      .catch(err => {
+        console.error('Erro ao salvar no CRM:', err);
+      });
 
     // Preparar mensagem para WhatsApp com dados do lead
     const message = `Olá! Meu nome é ${formData.name} e meu WhatsApp é ${formData.phone}. Vim do Google e gostaria de agendar uma reserva!`;

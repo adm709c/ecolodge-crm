@@ -117,6 +117,10 @@ export function KanbanBoard({ onOpenNewReservation }: KanbanBoardProps) {
     };
 
     loadReservations();
+
+    // Recarregar a cada 10 segundos
+    const interval = setInterval(loadReservations, 10000);
+    return () => clearInterval(interval);
   }, []);
 
   const handleOpenModal = () => {
