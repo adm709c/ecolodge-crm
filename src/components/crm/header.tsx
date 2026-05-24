@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Calendar, Target, Edit2 } from 'lucide-react';
+import { Calendar, Target, Edit2, ExternalLink } from 'lucide-react';
 import { EditMetaModal } from './edit-meta-modal';
 import { getMeta, updateMeta } from '@/lib/supabase';
 
@@ -50,9 +50,18 @@ export function CRMHeader() {
               Jornada do Hóspede - Kanban de Atendimento
             </p>
           </div>
-          <div className="text-right">
+          <div className="text-right flex flex-col items-end gap-2">
             <p className="text-sm text-sage-600 capitalize">{currentDate}</p>
-            <p className="text-xs text-sage-500 mt-1">Última atualização: agora</p>
+            <p className="text-xs text-sage-500">Última atualização: agora</p>
+            <a
+              href="/presell"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1 px-3 py-1.5 text-xs font-semibold text-eco-600 hover:text-eco-700 hover:bg-eco-50 rounded-lg transition-colors"
+            >
+              Ver Presell
+              <ExternalLink size={14} />
+            </a>
           </div>
         </div>
 
