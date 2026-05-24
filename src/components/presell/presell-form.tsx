@@ -70,20 +70,20 @@ export function PresellForm({ whatsappNumber }: PresellFormProps) {
   };
 
   return (
-    <div className="w-full max-w-md">
-      <div className="bg-white rounded-2xl shadow-elevated p-8 border border-sage-200">
+    <div className="w-full max-w-md mx-auto px-4 sm:px-0">
+      <div className="bg-white rounded-xl sm:rounded-2xl shadow-elevated p-6 sm:p-8 border border-sage-200">
         {/* Header */}
         <div className="flex items-center justify-center mb-6">
-          <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-eco-500 to-sage-600 flex items-center justify-center text-white">
-            <Leaf size={28} />
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-gradient-to-br from-eco-500 to-sage-600 flex items-center justify-center text-white">
+            <Leaf size={24} className="sm:w-7 sm:h-7" />
           </div>
         </div>
 
-        <div className="text-center mb-8">
-          <h1 className="font-serif text-2xl font-bold text-charcoal mb-2">
+        <div className="text-center mb-6 sm:mb-8">
+          <h1 className="font-serif text-lg sm:text-2xl font-bold text-charcoal mb-2">
             Eco Lodge Praia de Gravatá
           </h1>
-          <p className="text-sage-600 text-sm">
+          <p className="text-sage-600 text-xs sm:text-sm">
             Preencha seus dados para falar conosco no WhatsApp
           </p>
         </div>
@@ -92,7 +92,7 @@ export function PresellForm({ whatsappNumber }: PresellFormProps) {
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Nome */}
           <div>
-            <label htmlFor="name" className="block text-sm font-semibold text-sage-700 mb-2">
+            <label htmlFor="name" className="block text-xs sm:text-sm font-semibold text-sage-700 mb-2">
               Seu Nome *
             </label>
             <input
@@ -103,13 +103,13 @@ export function PresellForm({ whatsappNumber }: PresellFormProps) {
               onChange={handleChange}
               placeholder="Ex: Maria Silva"
               required
-              className="w-full px-4 py-2.5 border border-sage-200 rounded-lg bg-cream focus:outline-none focus:ring-2 focus:ring-eco-500 placeholder-sage-400"
+              className="w-full px-3 sm:px-4 py-2 sm:py-2.5 text-sm sm:text-base border border-sage-200 rounded-lg bg-cream focus:outline-none focus:ring-2 focus:ring-eco-500 placeholder-sage-400"
             />
           </div>
 
           {/* Telefone */}
           <div>
-            <label htmlFor="phone" className="block text-sm font-semibold text-sage-700 mb-2">
+            <label htmlFor="phone" className="block text-xs sm:text-sm font-semibold text-sage-700 mb-2">
               Seu WhatsApp *
             </label>
             <input
@@ -120,7 +120,7 @@ export function PresellForm({ whatsappNumber }: PresellFormProps) {
               onChange={handleChange}
               placeholder="(85) 99999-9999"
               required
-              className="w-full px-4 py-2.5 border border-sage-200 rounded-lg bg-cream focus:outline-none focus:ring-2 focus:ring-eco-500 placeholder-sage-400"
+              className="w-full px-3 sm:px-4 py-2 sm:py-2.5 text-sm sm:text-base border border-sage-200 rounded-lg bg-cream focus:outline-none focus:ring-2 focus:ring-eco-500 placeholder-sage-400"
             />
           </div>
 
@@ -135,7 +135,7 @@ export function PresellForm({ whatsappNumber }: PresellFormProps) {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-eco-500 hover:bg-eco-600 disabled:bg-sage-400 text-white font-semibold py-2.5 rounded-lg transition-smooth flex items-center justify-center gap-2 mt-6"
+            className="w-full bg-eco-500 hover:bg-eco-600 disabled:bg-sage-400 text-white font-semibold py-2 sm:py-2.5 text-sm sm:text-base rounded-lg transition-smooth flex items-center justify-center gap-2 mt-6"
           >
             <Send size={18} />
             {isLoading ? 'Processando...' : 'Conversar no WhatsApp'}
