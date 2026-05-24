@@ -62,7 +62,7 @@ export function KanbanCard({ reservation, onEdit }: KanbanCardProps) {
               e.stopPropagation();
               onEdit?.(reservation);
             }}
-            className="opacity-0 group-hover:opacity-100 transition-opacity p-1 text-sage-600 hover:text-eco-600"
+            className="opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity p-1 text-sage-600 hover:text-eco-600"
             title="Editar"
           >
             <Edit2 size={14} />
