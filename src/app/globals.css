@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@400;700&display=swap');
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-cream text-charcoal;
+}
+
+/* Typography */
+h1 {
+  @apply font-serif text-3xl font-bold tracking-tight;
+}
+
+h2 {
+  @apply font-serif text-2xl font-bold tracking-tight;
+}
+
+h3 {
+  @apply font-serif text-xl font-bold tracking-tight;
+}
+
+/* Shadows */
+.shadow-soft {
+  @apply shadow-sm;
+}
+
+.shadow-elevated {
+  @apply shadow-lg;
+}
+
+/* Transitions */
+.transition-smooth {
+  @apply transition duration-200 ease-in-out;
+}
