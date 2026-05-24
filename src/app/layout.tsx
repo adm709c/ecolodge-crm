@@ -15,9 +15,9 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" className="h-full">
       <body className="bg-cream h-full">
-        <div className="flex h-screen">
+        <div className="flex flex-col md:flex-row h-screen">
           <Sidebar />
-          <main className="flex-1 bg-cream">{children}</main>
+          <main className="flex-1 bg-cream overflow-y-auto">{children}</main>
         </div>
       </body>
     </html>

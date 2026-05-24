@@ -192,11 +192,11 @@ export function KanbanBoard({ onOpenNewReservation }: KanbanBoardProps) {
         </button>
       </div>
 
-      <div className="flex gap-4 min-w-full h-[calc(100vh-280px)] overflow-y-auto">
+      <div className="flex gap-3 sm:gap-4 min-w-full h-[calc(100vh-280px)] overflow-x-auto overflow-y-hidden">
         {columns.map((column) => (
           <div
             key={column.id}
-            className={`flex-1 min-w-0 rounded-lg ${column.color} border ${column.borderColor} flex flex-col flex-shrink-0`}
+            className={`w-full sm:flex-1 min-w-[280px] sm:min-w-0 rounded-lg ${column.color} border ${column.borderColor} flex flex-col flex-shrink-0`}
           >
             {/* Column Header */}
             <div className="px-3 py-2 border-b border-gray-200 flex-shrink-0">

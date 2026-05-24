@@ -42,7 +42,7 @@ export function CRMHeader() {
 
   return (
     <header className="bg-white border-b border-sage-200 shadow-soft">
-      <div className="max-w-7xl mx-auto px-8 py-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-4 sm:py-6">
         <div className="flex justify-between items-start mb-6">
           <div>
             <h1 className="text-charcoal mb-2">CRM de Reservas</h1>
