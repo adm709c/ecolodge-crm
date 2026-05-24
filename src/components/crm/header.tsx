@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import { Calendar, Target, Edit2, ExternalLink } from 'lucide-react';
 import { EditMetaModal } from './edit-meta-modal';
-import { getMeta, updateMeta } from '@/lib/supabase';
 
 export function CRMHeader() {
   const [meta, setMeta] = useState(0);
@@ -18,28 +17,22 @@ export function CRMHeader() {
     year: 'numeric',
   });
 
-  // Carregar meta do Supabase
+  // Carregar meta do localStorage
   useEffect(() => {
-    const loadMeta = async () => {
-      try {
-        const metaValue = await getMeta();
-        setMeta(metaValue);
-      } catch (error) {
-        console.error('Erro ao carregar meta:', error);
-      }
-    };
-    loadMeta();
+    const savedMeta = localStorage.getItem('eco_meta');
+    if (savedMeta) {
+      setMeta(Number(savedMeta));
+    }
   }, []);
 
-  const handleSaveMeta = async (newMeta: number) => {
+  const handleSaveMeta = (newMeta: number) => {
     try {
-      console.log('Salvando meta:', newMeta);
-      await updateMeta(newMeta);
+      localStorage.setItem('eco_meta', String(newMeta));
       setMeta(newMeta);
       alert(`Meta salva com sucesso: ${newMeta} reservas`);
     } catch (error) {
       console.error('Erro ao atualizar meta:', error);
-      alert('Erro ao salvar meta: ' + (error instanceof Error ? error.message : String(error)));
+      alert('Erro ao salvar meta');
     }
   };
 
