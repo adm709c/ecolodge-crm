@@ -21,7 +21,7 @@ const data = [
 
 export function ReservationChart() {
   return (
-    <div className="bg-white rounded-lg p-6 border border-sage-200 shadow-soft">
+    <div className="bg-white rounded-lg p-4 sm:p-6 border border-sage-200 shadow-soft">
       <h3 className="font-serif font-bold text-charcoal mb-4">
         Curva de Reservas
       </h3>

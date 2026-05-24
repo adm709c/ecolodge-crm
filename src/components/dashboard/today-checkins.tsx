@@ -14,7 +14,7 @@ export function TodayCheckins() {
   return (
     <div className="space-y-4">
       {/* Check-ins */}
-      <div className="bg-white rounded-lg p-6 border border-sage-200 shadow-soft">
+      <div className="bg-white rounded-lg p-4 sm:p-6 border border-sage-200 shadow-soft">
         <h3 className="font-serif font-bold text-charcoal mb-4 flex items-center gap-2">
           <LogIn size={20} className="text-eco-500" />
           Check-ins de Hoje
@@ -46,7 +46,7 @@ export function TodayCheckins() {
       </div>
 
       {/* Check-outs */}
-      <div className="bg-white rounded-lg p-6 border border-sage-200 shadow-soft">
+      <div className="bg-white rounded-lg p-4 sm:p-6 border border-sage-200 shadow-soft">
         <h3 className="font-serif font-bold text-charcoal mb-4 flex items-center gap-2">
           <LogOut size={20} className="text-terracotta-500" />
           Check-outs de Hoje

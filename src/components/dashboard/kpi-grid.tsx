@@ -34,7 +34,7 @@ function KPICard({
   const colors = colorMap[color];
 
   return (
-    <div className={`${colors.bg} rounded-lg p-6 border border-sage-200 shadow-soft`}>
+    <div className={`${colors.bg} rounded-lg p-4 sm:p-6 border border-sage-200 shadow-soft`}>
       <div className="flex justify-between items-start mb-4">
         <div className={`${colors.icon} text-2xl`}>{icon}</div>
         {trend && (

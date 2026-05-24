@@ -7,7 +7,7 @@ export default function DashboardPage() {
   return (
     <div className="flex flex-col min-h-screen bg-cream">
       <DashboardHeader />
-      <main className="flex-1 p-8">
+      <main className="flex-1 p-4 sm:p-6 md:p-8">
         <div className="space-y-8 max-w-7xl mx-auto">
           {/* KPIs */}
           <KPIGrid />
