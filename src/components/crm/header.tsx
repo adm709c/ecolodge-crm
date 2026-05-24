@@ -27,12 +27,15 @@ export function CRMHeader() {
 
   const handleSaveMeta = (newMeta: number) => {
     try {
+      console.log('Tentando salvar meta:', newMeta);
       localStorage.setItem('eco_meta', String(newMeta));
+      console.log('Meta salva no localStorage');
       setMeta(newMeta);
       alert(`Meta salva com sucesso: ${newMeta} reservas`);
     } catch (error) {
-      console.error('Erro ao atualizar meta:', error);
-      alert('Erro ao salvar meta');
+      console.error('Erro ao salvar meta:', error);
+      const errorMsg = error instanceof Error ? error.message : 'Erro desconhecido';
+      alert(`Erro ao salvar meta: ${errorMsg}`);
     }
   };
 
