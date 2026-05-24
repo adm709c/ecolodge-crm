@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { RotateCw } from 'lucide-react';
 import { KanbanCard } from './card';
 import { NewReservationModal } from './new-reservation-modal';
 import { EditReservationModal } from './edit-reservation-modal';
@@ -70,52 +71,60 @@ export function KanbanBoard({ onOpenNewReservation }: KanbanBoardProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingReservation, setEditingReservation] = useState<Reservation | undefined>(undefined);
   const [allReservations, setAllReservations] = useState(mockReservations);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const loadReservations = async () => {
+    setIsLoading(true);
+    try {
+      console.log('Carregando reservações...');
+      const data = await getAllReservations();
+      console.log('Dados recebidos:', data);
+
+      // Se não há dados, usar mockReservations
+      if (!data || data.length === 0) {
+        console.log('Nenhum dado, usando mock');
+        setAllReservations(mockReservations);
+        setIsLoading(false);
+        return;
+      }
+
+      // Organizar por status para o Kanban
+      const organized: Record<string, any[]> = {
+        new_lead: [],
+        in_service: [],
+        awaiting_payment: [],
+        confirmed: [],
+        cancelled: [],
+      };
+
+      data.forEach((reservation: any) => {
+        const status = reservation.status || 'new_lead';
+        if (organized[status]) {
+          organized[status].push({
+            id: reservation.id,
+            guestName: reservation.guest_name,
+            checkIn: reservation.check_in,
+            checkOut: reservation.check_out,
+            people: reservation.people,
+            value: reservation.value || 0,
+            source: reservation.source || 'google_ads',
+            phone: reservation.phone,
+            gclid: reservation.gclid,
+          });
+        }
+      });
+
+      console.log('Dados organizados:', organized);
+      setAllReservations(organized);
+    } catch (error) {
+      console.error('Erro ao carregar reservações:', error);
+      setAllReservations(mockReservations);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
-    // Carregar dados do Supabase
-    const loadReservations = async () => {
-      try {
-        const data = await getAllReservations();
-
-        // Se não há dados, usar mockReservations
-        if (!data || data.length === 0) {
-          setAllReservations(mockReservations);
-          return;
-        }
-
-        // Organizar por status para o Kanban
-        const organized: Record<string, any[]> = {
-          new_lead: [],
-          in_service: [],
-          awaiting_payment: [],
-          confirmed: [],
-          cancelled: [],
-        };
-
-        data.forEach((reservation: any) => {
-          const status = reservation.status || 'new_lead';
-          if (organized[status]) {
-            organized[status].push({
-              id: reservation.id,
-              guestName: reservation.guest_name,
-              checkIn: reservation.check_in,
-              checkOut: reservation.check_out,
-              people: reservation.people,
-              value: reservation.value || 0,
-              source: reservation.source || 'google_ads',
-              phone: reservation.phone,
-              gclid: reservation.gclid,
-            });
-          }
-        });
-
-        setAllReservations(organized);
-      } catch (error) {
-        console.error('Erro ao carregar reservações:', error);
-        setAllReservations(mockReservations);
-      }
-    };
-
     loadReservations();
 
     // Recarregar a cada 10 segundos
@@ -187,7 +196,15 @@ export function KanbanBoard({ onOpenNewReservation }: KanbanBoardProps) {
 
   return (
     <>
-      <div className="mb-4 flex justify-end">
+      <div className="mb-4 flex justify-end gap-2">
+        <button
+          onClick={loadReservations}
+          disabled={isLoading}
+          className="px-4 py-1.5 rounded-lg bg-sage-200 text-sage-700 font-semibold text-sm hover:bg-sage-300 transition-smooth disabled:opacity-50 flex items-center gap-2"
+        >
+          <RotateCw size={16} className={isLoading ? 'animate-spin' : ''} />
+          Atualizar
+        </button>
         <button
           onClick={handleOpenModal}
           className="px-4 py-1.5 rounded-lg bg-eco-500 text-white font-semibold text-sm hover:bg-eco-600 transition-smooth"
