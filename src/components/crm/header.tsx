@@ -33,10 +33,13 @@ export function CRMHeader() {
 
   const handleSaveMeta = async (newMeta: number) => {
     try {
+      console.log('Salvando meta:', newMeta);
       await updateMeta(newMeta);
       setMeta(newMeta);
+      alert(`Meta salva com sucesso: ${newMeta} reservas`);
     } catch (error) {
       console.error('Erro ao atualizar meta:', error);
+      alert('Erro ao salvar meta: ' + (error instanceof Error ? error.message : String(error)));
     }
   };
 
