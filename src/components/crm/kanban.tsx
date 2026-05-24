@@ -78,11 +78,47 @@ export function KanbanBoard({ onOpenNewReservation }: KanbanBoardProps) {
     try {
       console.log('Carregando reservações...');
       const data = await getAllReservations();
-      console.log('Dados recebidos:', data);
+      console.log('Dados recebidos do Supabase:', data);
 
-      // Se não há dados, usar mockReservations
+      // Se não há dados do Supabase, carregar do localStorage
       if (!data || data.length === 0) {
-        console.log('Nenhum dado, usando mock');
+        console.log('Nenhum dado no Supabase, tentando localStorage...');
+        const localLeads = JSON.parse(localStorage.getItem('eco_leads') || '[]');
+
+        if (localLeads.length > 0) {
+          console.log('Encontrados leads no localStorage:', localLeads);
+          // Converter leads do localStorage para o formato esperado
+          const organized: Record<string, any[]> = {
+            new_lead: [],
+            in_service: [],
+            awaiting_payment: [],
+            confirmed: [],
+            cancelled: [],
+          };
+
+          localLeads.forEach((lead: any) => {
+            const status = lead.status || 'new_lead';
+            if (organized[status]) {
+              organized[status].push({
+                id: lead.id,
+                guestName: lead.guest_name,
+                checkIn: lead.check_in,
+                checkOut: lead.check_out,
+                people: lead.people,
+                value: lead.value || 0,
+                source: lead.source || 'google_ads',
+                phone: lead.phone,
+                gclid: lead.gclid,
+              });
+            }
+          });
+
+          setAllReservations(organized);
+          setIsLoading(false);
+          return;
+        }
+
+        console.log('Nenhum dado em lugar nenhum, usando mock');
         setAllReservations(mockReservations);
         setIsLoading(false);
         return;
