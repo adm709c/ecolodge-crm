@@ -341,7 +341,14 @@ export function KanbanBoard({ onOpenNewReservation }: KanbanBoardProps) {
             </div>
 
             {/* Cards Container */}
-            <div className="p-3 space-y-2 overflow-y-auto flex-1">
+            <div
+              className="p-3 space-y-2 overflow-y-auto flex-1"
+              onDragOver={(e) => {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = 'move';
+              }}
+              onDrop={(e) => handleDrop(e, column.id)}
+            >
               {allReservations[column.id]?.map((reservation) => (
                 <KanbanCard
                   key={reservation.id}
