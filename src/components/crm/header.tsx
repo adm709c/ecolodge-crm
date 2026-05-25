@@ -24,19 +24,23 @@ export function CRMHeader() {
       setMeta(Number(savedMeta));
     }
 
-    // Carregar reservas confirmadas
+    // Carregar reservas no pipeline (awaiting_payment ou confirmed)
     const loadConfirmed = async () => {
       try {
         const { getAllReservations } = await import('@/lib/supabase');
         const data = await getAllReservations();
-        const confirmedCount = data.filter((r: any) => r.status === 'confirmed').length;
-        setConfirmed(confirmedCount);
+        const pipelineCount = data.filter((r: any) =>
+          r.status === 'awaiting_payment' || r.status === 'confirmed'
+        ).length;
+        setConfirmed(pipelineCount);
       } catch (err) {
-        console.error('Erro ao carregar reservas confirmadas:', err);
+        console.error('Erro ao carregar reservas no pipeline:', err);
         // Fallback: tentar localStorage
         const localLeads = JSON.parse(localStorage.getItem('eco_leads') || '[]');
-        const confirmedCount = localLeads.filter((lead: any) => lead.status === 'confirmed').length;
-        setConfirmed(confirmedCount);
+        const pipelineCount = localLeads.filter((lead: any) =>
+          lead.status === 'awaiting_payment' || lead.status === 'confirmed'
+        ).length;
+        setConfirmed(pipelineCount);
       }
     };
 
