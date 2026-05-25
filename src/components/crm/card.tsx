@@ -1,6 +1,6 @@
 'use client';
 
-import { Calendar, Users, DollarSign, Globe, Edit2 } from 'lucide-react';
+import { Calendar, Users, DollarSign, Globe, Edit2, Trash2 } from 'lucide-react';
 
 interface Reservation {
   id: string;
@@ -10,6 +10,7 @@ interface Reservation {
   people: number;
   value: number;
   source: 'google_business' | 'google_organic' | 'google_ads' | 'instagram' | 'direct';
+  gclid?: string;
 }
 
 const sourceConfig = {
@@ -34,14 +35,22 @@ function calculateNights(checkIn: string, checkOut: string) {
 interface KanbanCardProps {
   reservation: Reservation;
   onEdit?: (reservation: Reservation) => void;
+  onDelete?: (reservationId: string) => void;
 }
 
-export function KanbanCard({ reservation, onEdit }: KanbanCardProps) {
+export function KanbanCard({ reservation, onEdit, onDelete }: KanbanCardProps) {
   const nights = calculateNights(reservation.checkIn, reservation.checkOut);
   const source = sourceConfig[reservation.source];
 
   return (
-    <div className="bg-white rounded-lg p-3 border border-sage-200 shadow-sm hover:shadow-md transition-smooth cursor-grab active:cursor-grabbing group">
+    <div
+      draggable
+      onDragStart={(e) => {
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('reservation', JSON.stringify(reservation));
+      }}
+      className="bg-white rounded-lg p-3 border border-sage-200 shadow-sm hover:shadow-md transition-smooth cursor-grab active:cursor-grabbing group"
+    >
       {/* Header: Guest Name + Source Badge + Edit Button */}
       <div className="flex justify-between items-start gap-2 mb-2">
         <div className="flex-1 min-w-0">
@@ -67,6 +76,18 @@ export function KanbanCard({ reservation, onEdit }: KanbanCardProps) {
           >
             <Edit2 size={14} />
           </button>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              if (confirm('Tem certeza que deseja deletar este lead?')) {
+                onDelete?.(reservation.id);
+              }
+            }}
+            className="opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity p-1 text-sage-600 hover:text-red-600"
+            title="Deletar"
+          >
+            <Trash2 size={14} />
+          </button>
         </div>
       </div>
 
@@ -91,6 +112,13 @@ export function KanbanCard({ reservation, onEdit }: KanbanCardProps) {
           <DollarSign size={12} className="text-eco-500 flex-shrink-0" />
           <span>R$ {reservation.value.toLocaleString('pt-BR')}</span>
         </div>
+
+        {/* GCLID */}
+        {reservation.gclid && (
+          <div className="text-xs text-sage-400 truncate mt-1">
+            gclid: {reservation.gclid.substring(0, 12)}...
+          </div>
+        )}
       </div>
     </div>
   );

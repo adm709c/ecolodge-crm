@@ -5,7 +5,7 @@ import { RotateCw } from 'lucide-react';
 import { KanbanCard } from './card';
 import { NewReservationModal } from './new-reservation-modal';
 import { EditReservationModal } from './edit-reservation-modal';
-import { getAllReservations, updateReservation } from '@/lib/supabase';
+import { getAllReservations, updateReservation, deleteReservation } from '@/lib/supabase';
 
 interface Reservation {
   id: string;
@@ -230,6 +230,73 @@ export function KanbanBoard({ onOpenNewReservation }: KanbanBoardProps) {
     }
   };
 
+  const handleDrop = async (e: React.DragEvent, columnId: string) => {
+    e.preventDefault();
+    const reservationData = e.dataTransfer.getData('reservation');
+
+    if (!reservationData) return;
+
+    try {
+      const reservation = JSON.parse(reservationData) as Reservation;
+
+      // Atualizar status no banco
+      await updateReservation(reservation.id, {
+        guest_name: reservation.guestName,
+        check_in: reservation.checkIn,
+        check_out: reservation.checkOut,
+        people: reservation.people,
+        value: reservation.value,
+        source: reservation.source,
+        status: columnId,
+      });
+
+      // Atualizar estado local
+      const newReservations = { ...allReservations };
+
+      // Remover do status anterior
+      for (const status in newReservations) {
+        newReservations[status] = newReservations[status].filter(
+          (r) => r.id !== reservation.id
+        );
+      }
+
+      // Adicionar ao novo status
+      if (!newReservations[columnId]) {
+        newReservations[columnId] = [];
+      }
+
+      newReservations[columnId].push({
+        ...reservation,
+      });
+
+      setAllReservations(newReservations);
+    } catch (error) {
+      console.error('Erro ao mover reservação:', error);
+    }
+  };
+
+  const handleDeleteReservation = async (reservationId: string) => {
+    try {
+      await deleteReservation(reservationId);
+
+      // Remover do estado local
+      const newReservations = { ...allReservations };
+      for (const status in newReservations) {
+        newReservations[status] = newReservations[status].filter(
+          (r) => r.id !== reservationId
+        );
+      }
+      setAllReservations(newReservations);
+
+      // Remover do localStorage
+      const localLeads = JSON.parse(localStorage.getItem('eco_leads') || '[]');
+      const filtered = localLeads.filter((lead: any) => lead.id !== reservationId);
+      localStorage.setItem('eco_leads', JSON.stringify(filtered));
+    } catch (error) {
+      console.error('Erro ao deletar reservação:', error);
+    }
+  };
+
   return (
     <>
       <div className="mb-4 flex justify-end gap-2">
@@ -254,6 +321,8 @@ export function KanbanBoard({ onOpenNewReservation }: KanbanBoardProps) {
           <div
             key={column.id}
             className={`w-full sm:flex-1 min-w-[280px] sm:min-w-0 rounded-lg ${column.color} border ${column.borderColor} flex flex-col flex-shrink-0`}
+            onDragOver={(e) => e.preventDefault()}
+            onDrop={(e) => handleDrop(e, column.id)}
           >
             {/* Column Header */}
             <div className="px-3 py-2 border-b border-gray-200 flex-shrink-0">
@@ -272,6 +341,7 @@ export function KanbanBoard({ onOpenNewReservation }: KanbanBoardProps) {
                   key={reservation.id}
                   reservation={reservation}
                   onEdit={handleEditReservation}
+                  onDelete={handleDeleteReservation}
                 />
               ))}
             </div>

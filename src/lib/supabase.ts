@@ -63,6 +63,15 @@ export async function updateReservation(id: string, updates: Partial<Reservation
   return data?.[0];
 }
 
+export async function deleteReservation(id: string) {
+  const { error } = await supabase
+    .from('reservations')
+    .delete()
+    .eq('id', id);
+
+  if (error) throw error;
+}
+
 // Funções de Meta
 export async function getMeta() {
   try {

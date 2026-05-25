@@ -139,12 +139,6 @@ export function PresellForm({ whatsappNumber }: PresellFormProps) {
             />
           </div>
 
-          {/* gclid hidden info */}
-          {gclid && (
-            <p className="text-xs text-sage-500 text-center">
-              ID de campanha capturado: {gclid.substring(0, 20)}...
-            </p>
-          )}
 
           {/* Submit Button */}
           <button
