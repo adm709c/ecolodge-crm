@@ -40,9 +40,8 @@ export function PresellForm({ whatsappNumber }: PresellFormProps) {
       return;
     }
 
-    // Salvar lead no CRM (sem bloquear o redirect)
+    // Salvar lead no CRM
     const newLead = {
-      id: `lead_${Date.now()}`,
       guest_name: formData.name,
       check_in: new Date().toISOString().split('T')[0],
       check_out: new Date(Date.now() + 86400000).toISOString().split('T')[0],
@@ -54,25 +53,25 @@ export function PresellForm({ whatsappNumber }: PresellFormProps) {
       gclid: gclid,
     };
 
-    // Salvar no localStorage (local storage)
+    // Salvar no Supabase (sincronamente)
+    try {
+      await createReservation(newLead);
+      console.log('Lead salvo com sucesso no Supabase');
+    } catch (err) {
+      console.error('Erro ao salvar no Supabase:', err);
+      alert('Erro ao salvar lead. Tente novamente.');
+      setIsLoading(false);
+      return;
+    }
+
+    // Salvar no localStorage como backup
     try {
       const existingLeads = JSON.parse(localStorage.getItem('eco_leads') || '[]');
-      existingLeads.push(newLead);
+      existingLeads.push({ id: `lead_${Date.now()}`, ...newLead });
       localStorage.setItem('eco_leads', JSON.stringify(existingLeads));
-      console.log('Lead salvo no localStorage:', newLead);
     } catch (err) {
       console.error('Erro ao salvar no localStorage:', err);
     }
-
-    // Salvar no Supabase em background (não espera resposta)
-    console.log('Salvando lead no Supabase:', newLead);
-    createReservation(newLead)
-      .then(result => {
-        console.log('Lead salvo com sucesso no Supabase:', result);
-      })
-      .catch(err => {
-        console.error('Erro ao salvar no Supabase:', err);
-      });
 
     // Preparar mensagem para WhatsApp com dados do lead
     const message = `Olá! Meu nome é ${formData.name} e meu WhatsApp é ${formData.phone}. Vim do Google e gostaria de agendar uma reserva!`;

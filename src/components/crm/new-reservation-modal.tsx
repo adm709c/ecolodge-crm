@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Save, X } from 'lucide-react';
+import { createReservation } from '@/lib/supabase';
 
 interface NewReservationModalProps {
   isOpen: boolean;
@@ -27,20 +28,43 @@ export function NewReservationModal({ isOpen, onClose }: NewReservationModalProp
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Reserva criada (Google):', formData);
-    setFormData({
-      guestName: '',
-      email: '',
-      phone: '',
-      checkIn: '',
-      checkOut: '',
-      people: '2',
-      notes: '',
-      gclid: '',
-    });
-    onClose();
+
+    try {
+      await createReservation({
+        guest_name: formData.guestName,
+        check_in: formData.checkIn,
+        check_out: formData.checkOut,
+        people: Number(formData.people),
+        value: 0,
+        source: 'google_ads',
+        status: 'new_lead',
+        phone: formData.phone,
+        gclid: formData.gclid || undefined,
+      });
+
+      console.log('Reserva criada com sucesso');
+      setFormData({
+        guestName: '',
+        email: '',
+        phone: '',
+        checkIn: '',
+        checkOut: '',
+        people: '2',
+        notes: '',
+        gclid: '',
+      });
+      onClose();
+
+      // Recarregar a página para mostrar novo lead
+      setTimeout(() => {
+        window.location.reload();
+      }, 500);
+    } catch (error) {
+      console.error('Erro ao criar reserva:', error);
+      alert('Erro ao criar reserva. Tente novamente.');
+    }
   };
 
   const handleCancel = () => {
