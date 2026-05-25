@@ -225,6 +225,11 @@ export function KanbanBoard({ onOpenNewReservation }: KanbanBoardProps) {
 
       setAllReservations(organized);
       handleCloseEditModal();
+
+      // Recarregar dados após 1 segundo para sincronizar com Supabase
+      setTimeout(() => {
+        loadReservations();
+      }, 1000);
     } catch (error) {
       console.error('Erro ao atualizar reservação:', error);
     }
@@ -277,6 +282,11 @@ export function KanbanBoard({ onOpenNewReservation }: KanbanBoardProps) {
       });
 
       setAllReservations(newReservations);
+
+      // Recarregar dados após 1 segundo para sincronizar com Supabase
+      setTimeout(() => {
+        loadReservations();
+      }, 1000);
     } catch (error) {
       console.error('Erro ao mover reservação:', error);
     }
@@ -299,6 +309,11 @@ export function KanbanBoard({ onOpenNewReservation }: KanbanBoardProps) {
       const localLeads = JSON.parse(localStorage.getItem('eco_leads') || '[]');
       const filtered = localLeads.filter((lead: any) => lead.id !== reservationId);
       localStorage.setItem('eco_leads', JSON.stringify(filtered));
+
+      // Recarregar dados após 1 segundo para sincronizar com Supabase
+      setTimeout(() => {
+        loadReservations();
+      }, 1000);
     } catch (error) {
       console.error('Erro ao deletar reservação:', error);
     }
