@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import {
   LineChart,
   Line,
@@ -9,17 +10,57 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from 'recharts';
+import { getAllReservations } from '@/lib/supabase';
 
-const data = [
-  { month: 'Jan', reservas: 0, ocupacao: 0 },
-  { month: 'Fev', reservas: 0, ocupacao: 0 },
-  { month: 'Mar', reservas: 0, ocupacao: 0 },
-  { month: 'Abr', reservas: 0, ocupacao: 0 },
-  { month: 'Mai', reservas: 0, ocupacao: 0 },
-  { month: 'Jun', reservas: 0, ocupacao: 0 },
-];
+interface ChartData {
+  month: string;
+  reservas: number;
+  ocupacao: number;
+}
 
 export function ReservationChart() {
+  const [data, setData] = useState<ChartData[]>([]);
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const reservations = await getAllReservations();
+        const confirmedReservations = reservations.filter((r: any) => r.status === 'confirmed');
+
+        const months = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+        const now = new Date();
+        const currentMonth = now.getMonth();
+
+        const chartData: ChartData[] = [];
+        for (let i = 11; i >= 0; i--) {
+          const monthIndex = (currentMonth - i + 12) % 12;
+          const monthName = months[monthIndex];
+
+          const count = confirmedReservations.filter((r: any) => {
+            const checkInDate = new Date(r.check_in);
+            return checkInDate.getMonth() === monthIndex;
+          }).length;
+
+          chartData.push({
+            month: monthName,
+            reservas: count,
+            ocupacao: count > 0 ? Math.min((count / 5) * 100, 100) : 0,
+          });
+        }
+
+        setData(chartData);
+      } catch (error) {
+        console.error('Erro ao carregar dados:', error);
+        setData(months.map((month) => ({ month, reservas: 0, ocupacao: 0 })));
+      }
+    };
+
+    const months = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+    loadData();
+    const interval = setInterval(loadData, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="bg-white rounded-lg p-4 sm:p-6 border border-sage-200 shadow-soft">
       <h3 className="font-serif font-bold text-charcoal mb-4">

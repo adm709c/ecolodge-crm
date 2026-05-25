@@ -7,6 +7,7 @@ import { EditMetaModal } from './edit-meta-modal';
 export function CRMHeader() {
   const [meta, setMeta] = useState(0);
   const [confirmed, setConfirmed] = useState(0);
+  const [pipelineReservations, setPipelineReservations] = useState(0);
   const [isEditMetaOpen, setIsEditMetaOpen] = useState(false);
   const progressPercent = Math.round((confirmed / meta) * 100);
 
@@ -24,30 +25,30 @@ export function CRMHeader() {
       setMeta(Number(savedMeta));
     }
 
-    // Carregar reservas no pipeline (awaiting_payment ou confirmed)
-    const loadConfirmed = async () => {
+    // Carregar reservas confirmadas e no pipeline
+    const loadReservations = async () => {
       try {
         const { getAllReservations } = await import('@/lib/supabase');
         const data = await getAllReservations();
-        const pipelineCount = data.filter((r: any) =>
-          r.status === 'awaiting_payment' || r.status === 'confirmed'
-        ).length;
-        setConfirmed(pipelineCount);
+        const confirmedCount = data.filter((r: any) => r.status === 'confirmed').length;
+        const pipelineCount = data.filter((r: any) => r.status === 'awaiting_payment').length;
+        setConfirmed(confirmedCount);
+        setPipelineReservations(pipelineCount);
       } catch (err) {
-        console.error('Erro ao carregar reservas no pipeline:', err);
+        console.error('Erro ao carregar reservas:', err);
         // Fallback: tentar localStorage
         const localLeads = JSON.parse(localStorage.getItem('eco_leads') || '[]');
-        const pipelineCount = localLeads.filter((lead: any) =>
-          lead.status === 'awaiting_payment' || lead.status === 'confirmed'
-        ).length;
-        setConfirmed(pipelineCount);
+        const confirmedCount = localLeads.filter((lead: any) => lead.status === 'confirmed').length;
+        const pipelineCount = localLeads.filter((lead: any) => lead.status === 'awaiting_payment').length;
+        setConfirmed(confirmedCount);
+        setPipelineReservations(pipelineCount);
       }
     };
 
-    loadConfirmed();
+    loadReservations();
 
     // Recarregar a cada 5 segundos
-    const interval = setInterval(loadConfirmed, 5000);
+    const interval = setInterval(loadReservations, 5000);
     return () => clearInterval(interval);
   }, []);
 
@@ -115,8 +116,8 @@ export function CRMHeader() {
             <Calendar className="text-sand-500" size={24} />
             <div>
               <p className="text-xs text-sage-600 font-semibold">Reservas no Pipeline</p>
-              <p className="text-xl font-bold text-sand-700">0 reservas</p>
-              <p className="text-xs text-sage-600">Aguardando confirmação</p>
+              <p className="text-xl font-bold text-sand-700">{pipelineReservations} reservas</p>
+              <p className="text-xs text-sage-600">Aguardando pagamento</p>
             </div>
           </div>
         </div>

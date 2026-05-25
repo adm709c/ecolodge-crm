@@ -1,4 +1,8 @@
+'use client';
+
+import { useEffect, useState } from 'react';
 import { TrendingUp, Users, DollarSign } from 'lucide-react';
+import { getAllReservations } from '@/lib/supabase';
 
 interface KPICardProps {
   label: string;
@@ -56,19 +60,43 @@ function KPICard({
 }
 
 export function KPIGrid() {
+  const [revenue, setRevenue] = useState(0);
+  const [avgTicket, setAvgTicket] = useState(0);
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const data = await getAllReservations();
+        const confirmedReservations = data.filter((r: any) => r.status === 'confirmed');
+
+        const totalRevenue = confirmedReservations.reduce((sum: number, r: any) => sum + (r.value || 0), 0);
+        const average = confirmedReservations.length > 0 ? totalRevenue / confirmedReservations.length : 0;
+
+        setRevenue(totalRevenue);
+        setAvgTicket(average);
+      } catch (error) {
+        console.error('Erro ao carregar dados:', error);
+      }
+    };
+
+    loadData();
+    const interval = setInterval(loadData, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <KPICard
         label="Receita Mensal"
-        value="R$ 0"
-        subtitle="Estimado"
+        value={`R$ ${revenue.toLocaleString('pt-BR', { maximumFractionDigits: 0 })}`}
+        subtitle="Reservas Confirmadas"
         icon="💰"
         color="sand"
       />
       <KPICard
         label="Ticket Médio"
-        value="R$ 0"
-        subtitle="Por diária"
+        value={`R$ ${avgTicket.toLocaleString('pt-BR', { maximumFractionDigits: 0 })}`}
+        subtitle="Por reserva"
         icon="🎯"
         color="terracotta"
       />

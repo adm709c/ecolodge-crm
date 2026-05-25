@@ -1,10 +1,56 @@
+'use client';
+
+import { useEffect, useState } from 'react';
 import { LogIn, LogOut } from 'lucide-react';
+import { getAllReservations } from '@/lib/supabase';
 
-const checkins: { id: number; name: string; room: string; time: string }[] = [];
-
-const checkouts: { id: number; name: string; room: string; time: string }[] = [];
+interface Guest {
+  id: string;
+  name: string;
+  room: string;
+  time: string;
+}
 
 export function TodayCheckins() {
+  const [checkins, setCheckins] = useState<Guest[]>([]);
+  const [checkouts, setCheckouts] = useState<Guest[]>([]);
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const reservations = await getAllReservations();
+        const today = new Date().toISOString().split('T')[0];
+
+        const todayCheckins = reservations
+          .filter((r: any) => r.status === 'confirmed' && r.check_in === today)
+          .map((r: any, index: number) => ({
+            id: r.id,
+            name: r.guest_name,
+            room: String((index % 5) + 1),
+            time: '14:00',
+          }));
+
+        const todayCheckouts = reservations
+          .filter((r: any) => r.status === 'confirmed' && r.check_out === today)
+          .map((r: any, index: number) => ({
+            id: r.id,
+            name: r.guest_name,
+            room: String((index % 5) + 1),
+            time: '11:00',
+          }));
+
+        setCheckins(todayCheckins);
+        setCheckouts(todayCheckouts);
+      } catch (error) {
+        console.error('Erro ao carregar dados:', error);
+      }
+    };
+
+    loadData();
+    const interval = setInterval(loadData, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="space-y-4">
       {/* Check-ins */}
