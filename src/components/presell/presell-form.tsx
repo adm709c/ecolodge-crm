@@ -55,11 +55,14 @@ export function PresellForm({ whatsappNumber }: PresellFormProps) {
 
     // Salvar no Supabase (sincronamente)
     try {
-      await createReservation(newLead);
-      console.log('Lead salvo com sucesso no Supabase');
-    } catch (err) {
-      console.error('Erro ao salvar no Supabase:', err);
-      alert('Erro ao salvar lead. Tente novamente.');
+      console.log('📤 Enviando lead para Supabase:', newLead);
+      const result = await createReservation(newLead);
+      console.log('✅ Lead salvo com sucesso no Supabase:', result);
+    } catch (err: any) {
+      console.error('❌ Erro ao salvar no Supabase:', err);
+      const errorMsg = err?.message || JSON.stringify(err);
+      console.error('Detalhes do erro:', errorMsg);
+      alert(`Erro ao salvar lead: ${errorMsg}`);
       setIsLoading(false);
       return;
     }
