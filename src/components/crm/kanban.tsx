@@ -231,10 +231,15 @@ export function KanbanBoard({ onOpenNewReservation }: KanbanBoardProps) {
   };
 
   const handleDrop = async (e: React.DragEvent, columnId: string) => {
+    console.log('💧 Drop event na coluna:', columnId);
     e.preventDefault();
     const reservationData = e.dataTransfer.getData('reservation');
+    console.log('📦 Dados recebidos:', reservationData);
 
-    if (!reservationData) return;
+    if (!reservationData) {
+      console.log('❌ Nenhum dado no transfer');
+      return;
+    }
 
     try {
       const reservation = JSON.parse(reservationData) as Reservation;

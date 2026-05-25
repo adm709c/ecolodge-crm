@@ -44,10 +44,11 @@ export function KanbanCard({ reservation, onEdit, onDelete }: KanbanCardProps) {
 
   return (
     <div
-      draggable
+      draggable="true"
       onDragStart={(e) => {
-        e.dataTransfer.effectAllowed = 'move';
-        e.dataTransfer.setData('reservation', JSON.stringify(reservation));
+        console.log('🎯 Drag iniciado:', reservation.guestName);
+        e.dataTransfer!.effectAllowed = 'move';
+        e.dataTransfer!.setData('reservation', JSON.stringify(reservation));
       }}
       className="bg-white rounded-lg p-3 border border-sage-200 shadow-sm hover:shadow-md transition-smooth cursor-grab active:cursor-grabbing group"
     >
