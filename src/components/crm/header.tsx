@@ -17,12 +17,34 @@ export function CRMHeader() {
     year: 'numeric',
   });
 
-  // Carregar meta do localStorage
+  // Carregar meta e reservas confirmadas
   useEffect(() => {
     const savedMeta = localStorage.getItem('eco_meta');
     if (savedMeta) {
       setMeta(Number(savedMeta));
     }
+
+    // Carregar reservas confirmadas
+    const loadConfirmed = async () => {
+      try {
+        const { getAllReservations } = await import('@/lib/supabase');
+        const data = await getAllReservations();
+        const confirmedCount = data.filter((r: any) => r.status === 'confirmed').length;
+        setConfirmed(confirmedCount);
+      } catch (err) {
+        console.error('Erro ao carregar reservas confirmadas:', err);
+        // Fallback: tentar localStorage
+        const localLeads = JSON.parse(localStorage.getItem('eco_leads') || '[]');
+        const confirmedCount = localLeads.filter((lead: any) => lead.status === 'confirmed').length;
+        setConfirmed(confirmedCount);
+      }
+    };
+
+    loadConfirmed();
+
+    // Recarregar a cada 5 segundos
+    const interval = setInterval(loadConfirmed, 5000);
+    return () => clearInterval(interval);
   }, []);
 
   const handleSaveMeta = (newMeta: number) => {
