@@ -42,15 +42,19 @@ export function KanbanCard({ reservation, onEdit, onDelete }: KanbanCardProps) {
   const nights = calculateNights(reservation.checkIn, reservation.checkOut);
   const source = sourceConfig[reservation.source];
 
+  const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
+    console.log('🎯 Iniciando drag:', reservation.guestName);
+    if (e.dataTransfer) {
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('application/json', JSON.stringify(reservation));
+    }
+  };
+
   return (
     <div
-      draggable="true"
-      onDragStart={(e) => {
-        console.log('🎯 Drag iniciado:', reservation.guestName);
-        e.dataTransfer!.effectAllowed = 'move';
-        e.dataTransfer!.setData('reservation', JSON.stringify(reservation));
-      }}
-      className="bg-white rounded-lg p-3 border border-sage-200 shadow-sm hover:shadow-md transition-smooth cursor-grab active:cursor-grabbing group"
+      draggable={true}
+      onDragStart={handleDragStart}
+      className="bg-white rounded-lg p-3 border border-sage-200 shadow-sm hover:shadow-md transition-smooth cursor-grab active:cursor-grabbing group select-none"
     >
       {/* Header: Guest Name + Source Badge + Edit Button */}
       <div className="flex justify-between items-start gap-2 mb-2">

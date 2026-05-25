@@ -231,13 +231,15 @@ export function KanbanBoard({ onOpenNewReservation }: KanbanBoardProps) {
   };
 
   const handleDrop = async (e: React.DragEvent, columnId: string) => {
-    console.log('💧 Drop event na coluna:', columnId);
+    console.log('💧 Drop event:', columnId);
     e.preventDefault();
-    const reservationData = e.dataTransfer.getData('reservation');
-    console.log('📦 Dados recebidos:', reservationData);
+    e.stopPropagation();
+
+    const reservationData = e.dataTransfer.getData('application/json');
+    console.log('📦 Dados:', reservationData);
 
     if (!reservationData) {
-      console.log('❌ Nenhum dado no transfer');
+      console.log('❌ Sem dados');
       return;
     }
 
@@ -328,10 +330,9 @@ export function KanbanBoard({ onOpenNewReservation }: KanbanBoardProps) {
             className={`w-full sm:flex-1 min-w-[280px] sm:min-w-0 rounded-lg ${column.color} border ${column.borderColor} flex flex-col flex-shrink-0`}
             onDragOver={(e) => {
               e.preventDefault();
-              e.dataTransfer.dropEffect = 'move';
-            }}
-            onDragEnter={(e) => {
-              e.preventDefault();
+              if (e.dataTransfer) {
+                e.dataTransfer.dropEffect = 'move';
+              }
             }}
             onDrop={(e) => handleDrop(e, column.id)}
           >
