@@ -321,7 +321,13 @@ export function KanbanBoard({ onOpenNewReservation }: KanbanBoardProps) {
           <div
             key={column.id}
             className={`w-full sm:flex-1 min-w-[280px] sm:min-w-0 rounded-lg ${column.color} border ${column.borderColor} flex flex-col flex-shrink-0`}
-            onDragOver={(e) => e.preventDefault()}
+            onDragOver={(e) => {
+              e.preventDefault();
+              e.dataTransfer.dropEffect = 'move';
+            }}
+            onDragEnter={(e) => {
+              e.preventDefault();
+            }}
             onDrop={(e) => handleDrop(e, column.id)}
           >
             {/* Column Header */}
@@ -335,7 +341,7 @@ export function KanbanBoard({ onOpenNewReservation }: KanbanBoardProps) {
             </div>
 
             {/* Cards Container */}
-            <div className="p-3 space-y-2 overflow-hidden flex-1">
+            <div className="p-3 space-y-2 overflow-y-auto flex-1">
               {allReservations[column.id]?.map((reservation) => (
                 <KanbanCard
                   key={reservation.id}
