@@ -11,6 +11,7 @@ interface Reservation {
   people: number;
   value: number;
   source: 'google_business' | 'google_organic' | 'google_ads' | 'instagram' | 'direct';
+  gclid?: string;
 }
 
 interface EditReservationModalProps {
@@ -163,7 +164,7 @@ export function EditReservationModal({ isOpen, reservation, onClose, onSave }: E
             </fieldset>
 
             {/* Seção 3: Valor */}
-            <fieldset>
+            <fieldset className="border-b border-sage-100 pb-6">
               <legend className="font-serif font-bold text-charcoal mb-4 text-lg">
                 Valor da Reserva
               </legend>
@@ -181,6 +182,29 @@ export function EditReservationModal({ isOpen, reservation, onClose, onSave }: E
                   step="0.01"
                   className="w-full px-4 py-2 border border-sage-200 rounded-lg bg-cream focus:outline-none focus:ring-2 focus:ring-eco-500"
                 />
+              </div>
+            </fieldset>
+
+            {/* Seção 4: gclid (opcional) */}
+            <fieldset>
+              <legend className="font-serif font-bold text-charcoal mb-4 text-lg">
+                Rastreamento
+              </legend>
+
+              <div>
+                <label htmlFor="gclid" className="block text-sm font-semibold text-sage-700 mb-2">
+                  Google Click ID (gclid) - Opcional
+                </label>
+                <input
+                  type="text"
+                  id="gclid"
+                  name="gclid"
+                  value={formData.gclid || ''}
+                  onChange={handleChange}
+                  placeholder="ID de rastreamento do Google Ads"
+                  className="w-full px-4 py-2 border border-sage-200 rounded-lg bg-cream focus:outline-none focus:ring-2 focus:ring-eco-500 text-xs"
+                />
+                <p className="text-xs text-sage-500 mt-2">Preenchido automaticamente para leads do Google Ads</p>
               </div>
             </fieldset>
 

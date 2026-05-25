@@ -17,6 +17,7 @@ export function NewReservationModal({ isOpen, onClose }: NewReservationModalProp
     checkOut: '',
     people: '2',
     notes: '',
+    gclid: '',
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -37,6 +38,7 @@ export function NewReservationModal({ isOpen, onClose }: NewReservationModalProp
       checkOut: '',
       people: '2',
       notes: '',
+      gclid: '',
     });
     onClose();
   };
@@ -50,6 +52,7 @@ export function NewReservationModal({ isOpen, onClose }: NewReservationModalProp
       checkOut: '',
       people: '2',
       notes: '',
+      gclid: '',
     });
     onClose();
   };
@@ -191,7 +194,30 @@ export function NewReservationModal({ isOpen, onClose }: NewReservationModalProp
               </div>
             </fieldset>
 
-            {/* Seção 3: Observações */}
+            {/* Seção 3: Rastreamento */}
+            <fieldset className="border-b border-sage-100 pb-6">
+              <legend className="font-serif font-bold text-charcoal mb-4 text-lg">
+                Rastreamento
+              </legend>
+
+              <div>
+                <label htmlFor="gclid" className="block text-sm font-semibold text-sage-700 mb-2">
+                  Google Click ID (gclid) - Opcional
+                </label>
+                <input
+                  type="text"
+                  id="gclid"
+                  name="gclid"
+                  value={formData.gclid}
+                  onChange={handleChange}
+                  placeholder="ID de rastreamento do Google Ads"
+                  className="w-full px-4 py-2 border border-sage-200 rounded-lg bg-cream focus:outline-none focus:ring-2 focus:ring-eco-500 text-xs"
+                />
+                <p className="text-xs text-sage-500 mt-2">Para rastreamento de campanha do Google Ads</p>
+              </div>
+            </fieldset>
+
+            {/* Seção 4: Observações */}
             <fieldset>
               <legend className="font-serif font-bold text-charcoal mb-4 text-lg">
                 Observações
